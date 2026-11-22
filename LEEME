@@ -1,0 +1,32 @@
+# Catálogo de Videojuegos con BD Relacional (UD3 — Acceso a Datos)
+
+Aplicación de consola desarrollada en **Kotlin** con **JDBC** y patrón **DAO** para gestionar un catálogo de videojuegos, jugadores y listas personalizadas sobre una base de datos relacional en **MariaDB / MySQL** (mediante **XAMPP**). Incluye gestión de transacciones (`commit` / `rollback`) y comprobación de integridad referencial.
+
+## Estructura de la Base de Datos
+
+La base de datos se denomina **`videojuegos`** y está formada por **cuatro tablas** con motor `InnoDB`, claves primarias (PK) y claves foráneas (FK):
+
+* **videojuegos**: almacena el catálogo (`id` PK autoincremental, `titulo`, `genero`, `anio`, `nota`).
+* **jugadores**: almacena los usuarios del sistema (`id_jugador` PK autoincremental, `nombre`, `nickname` único).
+* **listas**: almacena las listas de cada jugador (`id_lista` PK autoincremental, `nombre`, `id_jugador` FK hacia `jugadores(id_jugador)`).
+* **listas_videojuegos**: tabla intermedia `N:M` entre `listas` y `videojuegos` (`id_lista` FK hacia `listas(id_lista)`, `id_videojuego` FK hacia `videojuegos(id)`, `` `fecha_añadido` ``, con clave primaria compuesta `(id_lista, id_videojuego)`).
+
+El esquema completo (`CREATE TABLE`) y los datos iniciales (`INSERT` con al menos 5 videojuegos, 3 jugadores y 3 listas asignadas a distintos jugadores) se encuentran en **`datos/videojuegos.sql`**.
+
+## Instrucciones de Ejecución
+
+1. **Arrancar el servidor de base de datos**:
+   * Abre **XAMPP Control Panel** y arranca el servicio **MySQL** (puerto `3306`, servidor `10.11.16-MariaDB`).
+2. **Crear y poblar la base de datos**:
+   * Ejecuta el script **`datos/videojuegos.sql`** desde **phpMyAdmin** (`http://localhost/phpmyadmin`) o desde la herramienta *Database* de **IntelliJ IDEA**.
+3. **Configurar la conexión en Kotlin**:
+   * Verifica `ConexionBD.kt` (`jdbc:mysql://localhost:3306/videojuegos?useSSL=false&serverTimezone=UTC`, usuario `root` y contraseña vacía `""` en la instalación por defecto de XAMPP).
+   * Sincroniza Gradle en IntelliJ IDEA con la dependencia JDBC (`com.mysql:mysql-connector-j`).
+4. **Ejecutar la aplicación**:
+   * Ejecuta la función `main()` en `Main.kt` y utiliza el menú interactivo (opciones `0` a `11` repartidas entre videojuegos, jugadores y listas).
+
+## Decisiones de Diseño
+
+* **Tabla `jugadores` y relación con `listas`**: cada jugador tiene `id_jugador`, `nombre` y `nickname`. La relación entre `jugadores` y `listas` es de **uno a muchos (`1:N`)** mediante `listas.id_jugador`. Al crear una lista (opción 8) se exige un `id_jugador` existente; al eliminar un jugador (opción 7) se gestionan las listas vinculadas para mantener la integridad referencial.
+* **Transacciones al añadir videojuegos a una lista**: la inserción en `listas_videojuegos` (opción 10) comprueba la existencia de la lista y del videojuego dentro de una transacción con `autoCommit = false`, confirmando con `commit()` si todo es correcto o revirtiendo con `rollback()` ante cualquier error SQL.
+* **SGBD elegido**: se utiliza **MariaDB (`10.11.16-MariaDB`)** a través de **XAMPP** en `localhost:3306` como SGBD relacional cliente-servidor para el proyecto.
