@@ -36,13 +36,13 @@ object JugadorDAO {
                         stmtListas.executeUpdate()
                     }
 
-                    val borrado = conn.prepareStatement(sqlEliminarJugador).use { stmtJugador ->
+                    val borrar = conn.prepareStatement(sqlEliminarJugador).use { stmtJugador ->
                         stmtJugador.setInt(1, idJugador)
                         stmtJugador.executeUpdate() > 0
                     }
 
                     conn.commit()
-                    borrado
+                    borrar
                 } catch (e: SQLException) {
                     conn.rollback()
                     println("Error al eliminar jugador (rollback): ${e.message}")
