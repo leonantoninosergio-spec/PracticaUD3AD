@@ -31,7 +31,6 @@ object JugadorDAO {
             ConexionBD.getConnection()?.use { conn ->
                 conn.autoCommit = false
                 try {
-                    // Elimina primero las listas asociadas para respetar la FK
                     conn.prepareStatement(sqlEliminarListas).use { stmtListas ->
                         stmtListas.setInt(1, idJugador)
                         stmtListas.executeUpdate()

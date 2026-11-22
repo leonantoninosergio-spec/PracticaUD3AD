@@ -47,7 +47,7 @@ private fun mostrarMenu() {
     println(
         """
         
-        ===== CATÁLOGO DE VIDEOJUEGOS =====
+        ===== CÁTALOGO DE VIDEOJUEGOS =====
 
         --- VIDEOJUEGOS ---
         1. Ver todos los videojuegos
@@ -74,7 +74,7 @@ private fun mostrarMenu() {
     )
 }
 
-// --- BLOQUE VIDEOJUEGOS ---
+// --- BLOQUE DE VIDEOJUEGOS ---
 
 private fun verTodosLosVideojuegos() {
     val juegos = VideojuegoDAO.listarVideojuegos()
@@ -162,7 +162,7 @@ private fun eliminarVideojuego() {
     }
 }
 
-// --- BLOQUE JUGADORES ---
+// --- BLOQUE DE JUGADORES ---
 
 private fun crearJugador() {
     print("Nombre del jugador: ")
@@ -191,7 +191,7 @@ private fun eliminarJugador() {
     }
 }
 
-// --- BLOQUE LISTAS ---
+// --- BLOQUE DE LISTAS ---
 
 private fun crearLista() {
     print("Nombre de la lista: ")
@@ -251,7 +251,7 @@ private fun verVideojuegosDeLista() {
     }
 }
 
-// --- UTILIDADES DE ENTRADA ---
+// --- LEECTURAS DE ENTRADA ---
 
 private fun leerEntero(mensaje: String): Int? {
     print(mensaje)

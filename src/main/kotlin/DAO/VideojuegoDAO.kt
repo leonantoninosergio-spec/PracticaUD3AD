@@ -93,9 +93,9 @@ object VideojuegoDAO {
         var conn: Connection? = null
         try {
             conn = ConexionBD.getConnection()
-            conn?.autoCommit = false // 1. Iniciar transacción manual
+            conn?.autoCommit = false
 
-            // 2. Comprobar que el videojuego existe en la tabla videojuegos
+
             val existeVideojuego = conn?.prepareStatement("SELECT 1 FROM videojuegos WHERE id = ?")?.use { stmt ->
                 stmt.setInt(1, idVideojuego)
                 stmt.executeQuery().use { rs -> rs.next() }
@@ -105,7 +105,6 @@ object VideojuegoDAO {
                 throw SQLException("El videojuego con id=$idVideojuego no existe en la tabla videojuegos.")
             }
 
-            // 3. Insertar el registro en listas_videojuegos
             conn?.prepareStatement(
                 "INSERT INTO listas_videojuegos(id_lista, id_videojuego, fecha_añadido) VALUES (?, ?, ?)"
             )?.use { stmt ->
@@ -115,7 +114,6 @@ object VideojuegoDAO {
                 stmt.executeUpdate()
             }
 
-            // 4. Confirmar todos los cambios
             conn?.commit()
             println("Videojuego $idVideojuego añadido a la lista $idLista con éxito.")
         } catch (e: SQLException) {
